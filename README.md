@@ -3,16 +3,14 @@
 Code is for humans. There are a few simple things we can do to write more robust and maintainable code.
 
 ## HTML / CSS
-
-1.  Proper Formatting
-2.  Meaning / Purposeful Markup
-3.  Meaning / Purposeful Comments
-4.  Consistent Naming Convention
-    1.  BEM Modified
-5.  Reduce Specificity
-6.  Avoid Inline Styles
-7.  External Style Sheets
-8.  External JavaScript
+- [x] 1. Proper Formatting
+- [x] 2. Meaning / Purposeful Markup
+- [x] 3. Meaning / Purposeful Comments
+- [x] 4. Consistent Naming Convention
+- [x] 5. Reduce Specificity
+- [x] 6. Avoid Inline Styles
+- [x] 7. External Style Sheets
+- [X] 8. External JavaScript
 
 ### Proper Formatting
 
@@ -71,7 +69,7 @@ We work in a world of partials, this causes the output files to be rendered in u
 
 ### Meaning / Purposeful Markup
 
-There is a trend to nest extra div's for various reasons. This is especially noticeable with front end frame works. While I understand why libraries like Bootstrap need those div's, my concern is with their necessity overall. We should not be afraid of an extra div or span tag, but make it have meaning.
+There is a trend to nest extra `div`'s for various reasons. This is especially noticeable with front end frame works. While I understand why libraries like Bootstrap need those `div`'s, my concern is with their necessity overall. We should not be afraid of an extra `div` or `span` tag, but make it have meaning.
 
 Use the correct tag for the correct elements. Meaning, if you have a block of text, use a paragraph tag. If you need to click something, use an anchor or button.
 
@@ -183,9 +181,112 @@ Every project you work on is a little different. If you are new to the project, 
 </div>
 ```
 
+### Reduce Specificity
+
+First, lets define Specificity in CSS.
+
+> **Specificity** is the means by which browsers decide which CSS property values are the most relevant to an element and, therefore, will be applied. Specificity is based on the matching rules which are composed of different sorts of [CSS Selectors](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference#Selectors)
+> -- Source [Specificity MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity)
+
+There is a cool tool you can use to determine how *specific* selector rule is. [Specificity Calculator](https://specificity.keegan.st/)
+
+Specificity is broken down into 4 categories:
+
+- Inline +1 ( Most specific )
+- IDs +1 ( Very specific )
+- Classes +1 ( Generally specific )
+    - Attributes
+    - pseudo-classes [^1]
+- Element +1 ( Least specific )
+    - pseudo-elements [^1]
+
+> Basically a pseudo-class is a selector that assists in the selection of something that cannot be expressed by a simple selector, for example `:hover`.
+> A pseudo-element however allows us to create items that do not normally exist in the document tree, for example `::after`.
+>
+> -- source [Growing with the Web](http://www.growingwiththeweb.com/2012/08/pseudo-classes-vs-pseudo-elements.html)
+
+The way you calculate the specificity of a rule is to simply add one to each category that rule has. Your outcome will always be a 4 digit number. Let's take a look and some examples :
+
+```HTML
+<div class="item">
+    <p id="dark">This is text</p>
+</div>
+```
+
+```CSS
+// 0 1 0 1
+p#dark {
+    background: red;
+}
+
+// 0 0 1 1
+.item p {
+    background: yellow;
+}
+
+// 0 1 1 1
+body .item #dark {
+    background: cyan;
+}
+
+// 0 1 1 0
+[class="item"] #dark {
+    background: pink;
+}
+
+// 0 1 0 3
+body div p#dark {
+    background: blue;
+}
+
+// 0 1 0 0
+#dark {
+    background: green;
+}
+```
+
+Now that we understand what specificity is, let's look at a couple of examples that are bad and how we can correct them.
+
+#### Bad
+
+```CSS
+nav#nav ul li a {}
+.userProfile .social-links a {}
+article h2.title {}
+section.products div.product {}
+```
+
+#### Good
+
+```CSS
+#nav a {}
+.social-links a {}
+.title {}
+.product {}
+```
+
+### Better
+
+```CSS
+.nav__item {}
+.social-link {}
+.title {}
+.product {}
+```
+
+By utilizing classes with unique meaningful names you gain the ability to easily over write and avoid clashes with the *cascade* portion of CSS.
+
 ### Avoid Inline Styles
 
-Inline styles should only apply to JavaScript manipulation.
+As we learned about specificity in the previous section, it should go without saying that inline styles should be avoided. At least the hand created inline styles. If you are manipulating things with JavaScript, such as animations, the inline styles that creates is acceptable.
+
+There are some examples where one might be better suited for adding and removing classes in stead of adding an inline style. For example; hiding and showing something. You should opt for manipulating classes. This gives your more control of the adverse side affects caused by specificity.
+
+### External JavaScript
+
+It is best practice to keep all JavaScript functionality in an external file. Preferably with a good naming convention and structure, and included only on the pages it's needed.
+
+If you absolutely need to write inline JavaScript, it should be done for a clear and arguable reason. Other wise, put it in an external file.
 
 ## JavaScript
 
@@ -193,7 +294,7 @@ Inline styles should only apply to JavaScript manipulation.
 2.  Meaningful Variables
 3.  Meaningful Function Names
 4.  Minimize Global Scope
-5.  a
+5.
 
 ### Proper Formatting
 
@@ -218,4 +319,4 @@ function posts(string){
 }
 ```
 
-### Meaningful Varibles
+### Meaningful Variables
