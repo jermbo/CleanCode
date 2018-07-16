@@ -3,14 +3,16 @@
 Code is for humans. There are a few simple things we can do to write more robust and maintainable code.
 
 ## HTML / CSS
-- [x] 1. Proper Formatting
-- [x] 2. Meaning / Purposeful Markup
-- [x] 3. Meaning / Purposeful Comments
-- [x] 4. Consistent Naming Convention
-- [x] 5. Reduce Specificity
-- [x] 6. Avoid Inline Styles
-- [x] 7. External Style Sheets
-- [X] 8. External JavaScript
+
+- [x] 1.  Proper Formatting
+- [x] 2.  Meaning / Purposeful Markup
+- [x] 3.  Meaning / Purposeful Comments
+- [x] 4.  Consistent Naming Convention
+- [x] 5.  Reduce Specificity
+- [x] 6.  Avoid Inline Styles
+- [x] 7.  External Style Sheets
+- [x] 8.  External JavaScript
+- [ ] 9.  Code Smells in CSS / Sass
 
 ### Proper Formatting
 
@@ -188,17 +190,17 @@ First, lets define Specificity in CSS.
 > **Specificity** is the means by which browsers decide which CSS property values are the most relevant to an element and, therefore, will be applied. Specificity is based on the matching rules which are composed of different sorts of [CSS Selectors](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference#Selectors)
 > -- Source [Specificity MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity)
 
-There is a cool tool you can use to determine how *specific* selector rule is. [Specificity Calculator](https://specificity.keegan.st/)
+There is a cool tool you can use to determine how _specific_ selector rule is. [Specificity Calculator](https://specificity.keegan.st/)
 
 Specificity is broken down into 4 categories:
 
 - Inline +1 ( Most specific )
 - IDs +1 ( Very specific )
 - Classes +1 ( Generally specific )
-    - Attributes
-    - pseudo-classes [^1]
+  - Attributes
+  - pseudo-classes [^1]
 - Element +1 ( Least specific )
-    - pseudo-elements [^1]
+  - pseudo-elements [^1]
 
 > Basically a pseudo-class is a selector that assists in the selection of something that cannot be expressed by a simple selector, for example `:hover`.
 > A pseudo-element however allows us to create items that do not normally exist in the document tree, for example `::after`.
@@ -274,7 +276,7 @@ section.products div.product {}
 .product {}
 ```
 
-By utilizing classes with unique meaningful names you gain the ability to easily over write and avoid clashes with the *cascade* portion of CSS.
+By utilizing classes with unique meaningful names you gain the ability to easily over write and avoid clashes with the _cascade_ portion of CSS.
 
 ### Avoid Inline Styles
 
@@ -288,13 +290,202 @@ It is best practice to keep all JavaScript functionality in an external file. Pr
 
 If you absolutely need to write inline JavaScript, it should be done for a clear and arguable reason. Other wise, put it in an external file.
 
+### Code Smells in CSS / Sass
+
+Code smells in CSS and Sass take on many different forms. The rules presented below are best practice guide lines you should follow as closely as possible. The rare exception you need to break a rule, or rules, be prepared to articulate that decision and possibly leave a comment or two explaining why.
+
+#### Undoing Styles
+
+The nature of CSS is to cascade. The general rule of thumb is, if you need to remove CSS then those styles have been applied to early. For example:
+
+##### Bad
+
+```CSS
+h2 {
+    font-size: 2rem;
+    margin: 0 0 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #888;
+}
+
+.no-border {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+```
+
+##### Good
+
+```CSS
+h2 {
+    font-size: 2rem;
+    margin: 0 0 0.5rem;
+}
+
+.headline {
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #888;
+}
+```
+
+#### Qualified Selectors
+
+This derives a lot from the Specificity section. Qualified selectors always present problems in very subtle ways. Anything that has the HTML element attached to a class or id is an extra qualification that is not necessary.
+
+##### Bad
+
+With the code below, you are unable to reuse any of the classes unless they happen to have the same HTML qualifier in the markup. What happens in the situation where you want the `main-nav` to be the `nav` element? Or the `post` to be more semantic and be an `article` tag instead? The list goes on with this topic. Basically, never create a CSS rule with an attached HTML qualifier.
+
+```CSS
+ul.main-nav {}
+a.button {}
+div.header {}
+div.header a.logo img {}
+div.post {}
+```
+
+##### Good
+
+With these examples, you still get the same affect, but with a lot less specificity
+
+```CSS
+.main-nav {}
+.button {}
+.header {}
+.logo img {}
+.post {}
+```
+
+#### Nesting
+
+A general rule of thumb is, no more than three nested elements. This also plays into the Specificity section, but deserves to be called out for additional reasons. Specifically with pre-processors we have to conscious of the output. Things can get out of hand quickly. Let's look at a couple of examples.
+
+#### IDs
+
+Just don't style with ID's. The reasons are straight forward.
+
+- IDs are meant to be unique per page, and that defeats the reusability idea.
+- IDs can often have their traits abstracted into smaller, reusable classes.
+- An ID is infinitely more specific than a class.
+- There was a bug that allowed you to chain 256 classes to overwrite an ID. This has now been corrected.
+
+#### @extend vs @mixin
+
+The main issue with `@extends` is the slippery slope it creates. Sass's `@extend` is a greedy tool, it will extend every instance of a class that it finds and will generate crazy long selector chains. Check out this [example](https://twitter.com/gaelmetais/status/564109775995437057).
+
+Another issue presented with this is the grouping of unrelated class names. This is a topic in it of itself. Generally speaking we should try to group like things and keep unrelated things separate. We need to be careful of causing undesired affects but intending to change one thing but changing a lot of things.
+
+##### Bad
+
+```SCSS
+%specialFont {
+  font-weight: 700;
+  font-style: italic;
+}
+...
+.special-quote {
+  @extend %specialFont;
+  color: #e5e5e5;
+  font-size: 3rem;
+}
+...
+.btn {
+  @extend %specialFont;
+  color: #a3b3da;
+}
+...
+.bio__title {
+  @extend %specialFont;
+  color: cyan;
+  border-bottom: 1px solid cyan;
+}
+```
+
+Let's imagine the `...` represents a bunch of code or the breaking up into smaller files. The code above translates into the compiled CSS below.
+
+```CSS
+.special-quote, .btn, .bio__title {
+  font-weight: 700;
+  font-style: italic;
+}
+...
+.special-quote {
+  color: #e5e5e5;
+  font-size: 3rem;
+}
+...
+.btn {
+  color: #a3b3da;
+}
+...
+.bio__title {
+  color: cyan;
+  border-bottom: 1px solid cyan;
+}
+```
+
+The major problem is the grouping on classes that dont have anything to do with each other. Change the place holder class and you affect all of the other places that extend it. Which leads to changes that have a wide affect on your site and is very difficult test and QA for.
+
+The other way to solve this problem and not cause unforseen ripple affect is to overwrite the attributes being added. That should be properly considered and used if absolutely necessary.
+
+##### Good
+
+Let's rework this a little bit and utilize the `@mixin` to our advantage.
+
+```SCSS
+@mixin specialFont {
+  font-weight: 700;
+  font-style: italic;
+}
+...
+.title {
+  @include specialFont;
+  color: #e5e5e5;
+  font-size: 3rem;
+}
+...
+.btn {
+  @include specialFont;
+  color: #a3b3da;
+}
+...
+.bio__title {
+  @include specialFont;
+  color: cyan;
+  border-bottom: 1px solid cyan;
+}
+```
+
+The output code does have elements that repeat, but that is not an issue. Keeping things "DRY" is an argument for the source files, not an output generated file. GZip favors repetition, so this output will yield a better compression ration. This is a little confusing as the generated output using `@mixin` is larger, but the GZip compression works wonders on the files using `@mixin`. Read more about this topic at [CSS Wizardry](https://csswizardry.com/2016/02/mixins-better-for-performance/).
+
+```CSS
+.title {
+  font-weight: 700;
+  font-style: italic;
+  color: #e5e5e5;
+  font-size: 3rem;
+}
+...
+.btn {
+  font-weight: 700;
+  font-style: italic;
+  color: #a3b3da;
+}
+...
+.bio__title {
+  font-weight: 700;
+  font-style: italic;
+  color: cyan;
+  border-bottom: 1px solid cyan;
+}
+```
+
 ## JavaScript
 
 1.  Proper Formatting
 2.  Meaningful Variables
 3.  Meaningful Function Names
 4.  Minimize Global Scope
-5.
 
 ### Proper Formatting
 
