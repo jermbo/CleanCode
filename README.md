@@ -19,9 +19,9 @@ Code is for humans. There are a few simple things we can do to write more robust
 We work in a world of partials, this causes the output files to be rendered in unusual ways. However, that does not matter. What does matter is the formatting of the source files. This means, no trailing white space, proper indentation for parent / child elements, and meaningful white space around elements. Each file should be formatted properly for several reasons;
 
 1.  Readability
-    - It is way easier to see if closing tags are missing.
+    - It is way easier to reason about and spot errors.
 2.  Committing Code
-    - When committing code, there only things that should be included are the actual lines of code and not
+    - When committing code, there only things that should be included are the actual lines of code, not white space insertions or deletions.
 3.  Code Reviews
     - Code reviews are hard enough. Inconsistent formatting, such as trailing white space or misaligned parent / child elements, it can be difficult to see the new code that needs attention versus the bloat code that can be ignored.
 4.  Maintainability
@@ -33,16 +33,17 @@ We work in a world of partials, this causes the output files to be rendered in u
 <div class="container">
     <nav class="nav">
     <a href="#"><i class="fa fa-home"></i>
-        <span>Home</span></a><a href="#"><i class="fa fa-about"></i>
-            <span>About</span></a>
+        <span>Home</span><a href="#"><i class="fa fa-about"></i>
+            <span>About</span><a></a>
             <a href="#"><i class="fa fa-contact"></i>
-                <span>Contact</span></a>
+                <span>Contact</a></span>
     <a href="#"><i class="fa fa-gallery"></i>
         <span>Gallery</span>
     </a>
-</nav>
-</div>
+</nav></div>
 ```
+
+The above code is hard to read and reason about. There are a few errors in there, can you find them all?
 
 #### Good
 
@@ -71,9 +72,9 @@ We work in a world of partials, this causes the output files to be rendered in u
 
 ### Meaning / Purposeful Markup
 
-There is a trend to nest extra `div`'s for various reasons. This is especially noticeable with front end frame works. While I understand why libraries like Bootstrap need those `div`'s, my concern is with their necessity overall. We should not be afraid of an extra `div` or `span` tag, but make it have meaning.
+Markup should have purpose. We should not be afraid of an extra `div` or `span` where necessary. There is a trend to nest extra `div`'s for no obvious reason. This is especially noticeable with front end frame works. While I understand why libraries like Bootstrap need those `div`'s, my concern is with their necessity overall. Can we accomplish a similar outcome with less complexity?
 
-Use the correct tag for the correct elements. Meaning, if you have a block of text, use a paragraph tag. If you need to click something, use an anchor or button.
+Use the correct tag for the correct elements. Meaning, if you have a block of text, use a paragraph tag. If you need to click something, use an anchor or button. This not only makes your code easier to reason about, it also reduces need for extra functionality, and lends itself to better accessibility.
 
 #### Bad
 
@@ -82,6 +83,7 @@ Use the correct tag for the correct elements. Meaning, if you have a block of te
     <div class="title">Story Title</div>
     <span class="pub-date">2018-01-01</span>
     <div class="content">This is a story all about how my life got flipped turned upside down...</div>
+    <span class="read-more">Read More</span>
 </div>
 ```
 
@@ -92,12 +94,15 @@ Use the correct tag for the correct elements. Meaning, if you have a block of te
     <h1 class="title">Story Title</h1>
     <h6 class="pub-date">2018-01-01</h6>
     <p class="content">This is a story all about how my life got flipped turned upside down...</p>
+    <a href="/link/to/article.html" class="read-more">Read More</a>
 </article>
 ```
 
 ### Meaning / Purposeful Comments
 
-Code should be as self documenting as possible. But, there are reasons one would want to leave a comment. One could be to leave yourself a reminder or note to the next developer. _These should not make it to production so use VERY sparingly_. More useful would be an indication where something ends. A good habit I picked up early in my career was to open and then immediately close it, as well as note what has been closed. HTML has the tendency to get nested pretty deeply, this can cause it to be difficult to be certain what is open and close properly and where.
+Code should be as self documenting as possible. However, there are reasons one would want to leave a comment. One could be to leave yourself a reminder or note to the next developer. _**These should not make it to production so use VERY sparingly.**_
+
+A good habit I picked up early in my career was to open and then immediately close it, as well as note what has been closed. HTML has the tendency to get nested pretty deeply, this can cause it to be difficult to be certain what is open and close properly and where.
 
 ### Bad
 
@@ -110,17 +115,28 @@ Code should be as self documenting as possible. But, there are reasons one would
         </nav>
     </header>
     <main>
-        <div class="posts">
-            <div class="post">
+        <section class="posts">
+            <article class="post">
                 ...
-            </div>
-            <div class="post">
+            </article>
+            <article class="post">
                 ...
-            </div>
-            <div class="post">
+            </article>
+            <article class="post">
                 ...
-            </div>
-        </div>
+            </article>
+        </section>
+        <section class="recipes">
+            <article class="recipe">
+                ...
+            </article>
+            <article class="recipe">
+                ...
+            </article>
+            <article class="recipe">
+                ...
+            </article>
+        </section>
     </main>
 </div>
 ```
@@ -136,17 +152,28 @@ Code should be as self documenting as possible. But, there are reasons one would
         </nav>
     </header>
     <main>
-        <div class="posts">
-            <div class="post">
+        <section class="posts">
+            <article class="post">
                 ...
-            </div><!-- /post -->
-            <div class="post">
+            </article><!-- /post -->
+            <article class="post">
                 ...
-            </div><!-- /post -->
-            <div class="post">
+            </article><!-- /post -->
+            <article class="post">
                 ...
-            </div><!-- /post -->
-        </div><!-- /posts -->
+            </article><!-- /post -->
+        </section><!-- /posts -->
+        <section class="recipes">
+            <article class="recipe">
+                ...
+            </article><!-- /recipe -->
+            <article class="recipe">
+                ...
+            </article><!-- /recipe -->
+            <article class="recipe">
+                ...
+            </article><!-- /recipe -->
+        </section><!-- /recipes -->
     </main>
 </div><!-- /container -->
 ```
