@@ -5,25 +5,25 @@ Code is for humans. There are a few simple things we can do to write more robust
 ## HTML / CSS
 
 - [x] 1.  Proper Formatting
-- [x] 2.  Meaning / Purposeful Markup
-- [x] 3.  Meaning / Purposeful Comments
+- [x] 2.  Meaningful / Purposeful Markup
+- [x] 3.  Meaningful / Purposeful Comments
 - [x] 4.  Consistent Naming Convention
 - [x] 5.  Reduce Specificity
 - [x] 6.  Avoid Inline Styles
 - [x] 7.  External Style Sheets
 - [x] 8.  External JavaScript
-- [ ] 9.  Code Smells in CSS / Sass
+- [x] 9.  Code Smells in CSS / Sass
 
 ### Proper Formatting
 
-We work in a world of partials, this causes the output files to be rendered in unusual ways. However, that does not matter. What does matter is the formatting of the source files. This means, no trailing white space, proper indentation for parent / child elements, and meaningful white space around elements. Each file should be formatted properly for several reasons;
+We work in a world of partials, this causes the output files to be rendered in unusual ways. However, that does not matter. What does matter is the formatting of the source files. This means, no trailing whitespace, proper indentation for parent / child elements, and meaningful white space around elements. Each file should be formatted properly for several reasons;
 
 1.  Readability
     - It is way easier to reason about and spot errors.
 2.  Committing Code
-    - When committing code, there only things that should be included are the actual lines of code, not white space insertions or deletions.
+    - When committing code, the only things that should be included are the actual lines of changed code, not white space insertions or deletions.
 3.  Code Reviews
-    - Code reviews are hard enough. Inconsistent formatting, such as trailing white space or misaligned parent / child elements, it can be difficult to see the new code that needs attention versus the bloat code that can be ignored.
+    - Code reviews are hard enough. Inconsistent formatting, such as trailing whitespace or misaligned parent / child elements, can make it more difficult to see the new code that needs attention versus the bloat that can be ignored.
 4.  Maintainability
     - Code changes over time. Why not leave a proper foundation for our future selves or future developers?
 
@@ -70,11 +70,11 @@ The above code is hard to read and reason about. There are a few errors in there
 </div>
 ```
 
-### Meaning / Purposeful Markup
+### Meaningful / Purposeful Markup
 
-Markup should have purpose. We should not be afraid of an extra `div` or `span` where necessary. There is a trend to nest extra `div`'s for no obvious reason. This is especially noticeable with front end frame works. While I understand why libraries like Bootstrap need those `div`'s, my concern is with their necessity overall. Can we accomplish a similar outcome with less complexity?
+Markup should have purpose. We should not be afraid of an extra `div` or `span` where necessary. But I would question if the extra markup is absolutely necessary.
 
-Use the correct tag for the correct elements. Meaning, if you have a block of text, use a paragraph tag. If you need to click something, use an anchor or button. This not only makes your code easier to reason about, it also reduces need for extra functionality, and lends itself to better accessibility.
+It’s important to use the correct tag at the correct times. Meaning, if you have a block of text, use a paragraph tag. If you need to click something, use an anchor tag. Not only does this make your code easier to reason about, it reduces the need for extra JavaScript functionality, and lends itself to better accessibility.
 
 #### Bad
 
@@ -100,9 +100,9 @@ Use the correct tag for the correct elements. Meaning, if you have a block of te
 
 ### Meaning / Purposeful Comments
 
-Code should be as self documenting as possible. However, there are reasons one would want to leave a comment. One could be to leave yourself a reminder or note to the next developer. _**These should not make it to production so use VERY sparingly.**_
+Code should be as self documenting as possible. However, there are reasons one would want to leave a comment. One could be to leave yourself a reminder or leaving a note to the next developer. _**These should not make it to production and so should be used sparingly.**_
 
-A good habit I picked up early in my career was to open and then immediately close it, as well as note what has been closed. HTML has the tendency to get nested pretty deeply, this can cause it to be difficult to be certain what is open and close properly and where.
+A good habit I picked up early in my career was to open and then immediately close it, as well as note what has been closed. HTML has a tendency to get nested pretty deep, this can cause it to be difficult to be certain what is open and closed properly and where.
 
 ### Bad
 
@@ -180,7 +180,9 @@ A good habit I picked up early in my career was to open and then immediately clo
 
 ### Consistent Naming Convention
 
-Every project you work on is a little different. If you are new to the project, take the time to see what the style is and keep things similar. If you are starting a new project, decide what the naming style is going to be and be **consistent**.
+Every project you work on will be slightly different. If you are new to an existing project, take the time to see what the style is and keep your changes similar.
+
+If you are starting a new project, decide what the naming convention is going to be, document it, and be _consistent_.
 
 #### Bad
 
@@ -188,9 +190,9 @@ Every project you work on is a little different. If you are new to the project, 
 <div class="container">
     <header class="main-header">
         <nav id="mainNav">
-            <a href="#" class="mainNav__item">Home</a>
-            <a href="#" class="mainNav__item">About</a>
-            <a href="#" class="mainNav__item">Gallery</a>
+            <a href="#" class="main-nav__item">Home</a>
+            <a href="#" class="main-nav__item">About</a>
+            <a href="#" class="main-nav__item">Gallery</a>
         </nav>
     </header>
 </div>
@@ -212,12 +214,12 @@ Every project you work on is a little different. If you are new to the project, 
 
 ### Reduce Specificity
 
-First, lets define Specificity in CSS.
+First, let's define Specificity in CSS.
 
 > **Specificity** is the means by which browsers decide which CSS property values are the most relevant to an element and, therefore, will be applied. Specificity is based on the matching rules which are composed of different sorts of [CSS Selectors](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference#Selectors)
 > -- Source [Specificity MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity)
 
-There is a cool tool you can use to determine how _specific_ selector rule is. [Specificity Calculator](https://specificity.keegan.st/)
+There is a cool tool you can use to determine how _specific_ a selector rule is. [Specificity Calculator](https://specificity.keegan.st/)
 
 Specificity is broken down into 4 categories:
 
@@ -315,7 +317,7 @@ There are some examples where one might be better suited for adding and removing
 
 It is best practice to keep all JavaScript functionality in an external file. Preferably with a good naming convention and structure, and included only on the pages it's needed.
 
-If you absolutely need to write inline JavaScript, it should be done for a clear and arguable reason. Other wise, put it in an external file.
+If you absolutely need to write inline JavaScript, it should be done for a clear and arguable reason. Otherwise, put it in an external file.
 
 ### Code Smells in CSS / Sass
 
