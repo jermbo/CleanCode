@@ -311,7 +311,7 @@ By utilizing classes with unique meaningful names you gain the ability to easily
 
 As we learned about specificity in the previous section, it should go without saying that inline styles should be avoided. At least the hand created inline styles. If you are manipulating things with JavaScript, such as animations, the inline styles that creates is acceptable.
 
-There are some examples where one might be better suited for adding and removing classes in stead of adding an inline style. For example; hiding and showing something. You should opt for manipulating classes. This gives your more control of the adverse side affects caused by specificity.
+There are some examples where one might be better suited for adding and removing classes in stead of adding an inline style. For example; hiding and showing something. You should opt for manipulating classes. This gives your more control of the adverse side effects caused by specificity.
 
 ### External JavaScript
 
@@ -321,7 +321,7 @@ If you absolutely need to write inline JavaScript, it should be done for a clear
 
 ### Code Smells in CSS / Sass
 
-Code smells in CSS and Sass take on many different forms. The rules presented below are best practice guide lines you should follow as closely as possible. The rare exception you need to break a rule, or rules, be prepared to articulate that decision and possibly leave a comment or two explaining why.
+Code smells in CSS and Sass take on many different forms. The rules presented below are best practice guidelines you should follow as closely as possible. There are exception you need to break a rule, or rules, be prepared to articulate that decision and possibly leave a comment or two explaining why.
 
 #### Undoing Styles
 
@@ -375,7 +375,7 @@ div.post {}
 
 ##### Good
 
-With these examples, you still get the same affect, but with a lot less specificity
+With these examples, you still get the same effect, but with a lot less specificity
 
 ```CSS
 .main-nav {}
@@ -389,20 +389,162 @@ With these examples, you still get the same affect, but with a lot less specific
 
 A general rule of thumb is, no more than three nested elements. This also plays into the Specificity section, but deserves to be called out for additional reasons. Specifically with pre-processors we have to conscious of the output. Things can get out of hand quickly. Let's look at a couple of examples.
 
+##### Bad
+
+```Scss
+.blog-page {
+  .post {
+    ...
+    &__title {
+      ...
+    }
+
+    &__links {
+      a {
+        ...
+        span {
+          ...
+        }
+        &:hover {
+          ...
+          span {
+          }
+        }
+      }
+    }
+
+    &__hero {
+      ...
+      img {
+        ...
+      }
+    }
+  }
+}
+```
+
+The output looks like;
+
+```CSS
+.blog-page .post {
+  ...
+}
+.blog-page .post__title {
+  ...
+}
+.blog-page .post__links {
+  ...
+}
+.blog-page .post__links a {
+  ...
+}
+.blog-page .post__links a span {
+  ...
+}
+.blog-page .post__links a:hover {
+  ...
+}
+.blog-page .post__links a:hover span {
+  ...
+}
+.blog-page .post__hero {
+  ...
+}
+.blog-page .post__hero img {
+  ...
+}
+```
+
+##### Good
+
+```Scss
+.post {
+  ..
+}
+
+.post__title {
+  ...
+}
+
+.post__links {
+    ...
+}
+
+.post__links a,
+.post__link {
+  ...
+  span {
+    ...
+  }
+
+  &:hover {
+    ...
+    span {
+      ...
+    }
+  }
+}
+
+.post__hero {
+  ...
+  img {
+    ...
+  }
+}
+```
+
+```CSS
+.post {
+  ...
+}
+
+.post__title {
+  ...
+}
+
+.post__links {
+  ...
+}
+
+.post__links a,
+.post__link {
+  ...
+}
+.post__links a span,
+.post__link span {
+  ...
+}
+.post__links a:hover,
+.post__link:hover {
+  ...
+}
+.post__links a:hover span,
+.post__link:hover span {
+  ...
+}
+
+.post__hero {
+  ...
+}
+.post__hero img {
+  ...
+}
+```
+
 #### IDs
 
 Just don't style with ID's. The reasons are straight forward.
 
-- IDs are meant to be unique per page, and that defeats the reusability idea.
-- IDs can often have their traits abstracted into smaller, reusable classes.
+- IDs are meant to be unique per page, and that defeats the whole reusability idea.
+- IDs can often have most of, if not all of, their traits abstracted into smaller, reusable classes.
 - An ID is infinitely more specific than a class.
 - There was a bug that allowed you to chain 256 classes to overwrite an ID. This has now been corrected.
 
 #### @extend vs @mixin
 
-The main issue with `@extends` is the slippery slope it creates. Sass's `@extend` is a greedy tool, it will extend every instance of a class that it finds and will generate crazy long selector chains. Check out this [example](https://twitter.com/gaelmetais/status/564109775995437057).
+The main issue with `@extends` is the slippery slope it creates. Sass's `@extend` is a greedy tool, it will extend every instance of a class that it finds and will generate crazy long selector chains. Check out this [example](https://twitter.com/gaelmetais/status/564109775995437057) that demonstrates an extreme example, and is surprisingly easy to create.
 
-Another issue presented with this is the grouping of unrelated class names. This is a topic in it of itself. Generally speaking we should try to group like things and keep unrelated things separate. We need to be careful of causing undesired affects but intending to change one thing but changing a lot of things.
+Another issue presented with this is the grouping of unrelated class names. This is a topic in it of itself. Generally speaking we should try to group like things and keep unrelated things separate. We need to be careful of causing undesired effects, intending to change one thing but changing a lot of other things.
 
 ##### Bad
 
@@ -453,9 +595,9 @@ Let's imagine the `...` represents a bunch of code or the breaking up into small
 }
 ```
 
-The major problem is the grouping on classes that dont have anything to do with each other. Change the place holder class and you affect all of the other places that extend it. Which leads to changes that have a wide affect on your site and is very difficult test and QA for.
+The major problem is the grouping on classes that dont have anything to do with each other. Change the placeholder class and you effect all of the other places that extend it. Which leads to changes that have a wide effect on your site and is very difficult test and QA for.
 
-The other way to solve this problem and not cause unforseen ripple affect is to overwrite the attributes being added. That should be properly considered and used if absolutely necessary.
+The other way to solve this problem and not cause unforeseen ripple effect is to overwrite the attributes being added. That should be properly considered and used if absolutely necessary.
 
 ##### Good
 
@@ -485,7 +627,7 @@ Let's rework this a little bit and utilize the `@mixin` to our advantage.
 }
 ```
 
-The output code does have elements that repeat, but that is not an issue. Keeping things "DRY" is an argument for the source files, not an output generated file. GZip favors repetition, so this output will yield a better compression ration. This is a little confusing as the generated output using `@mixin` is larger, but the GZip compression works wonders on the files using `@mixin`. Read more about this topic at [CSS Wizardry](https://csswizardry.com/2016/02/mixins-better-for-performance/).
+The output code does have elements that repeat, but that is not an issue. Keeping things "DRY" is an argument for the source files, not an output generated file. This is a little confusing as the generated output using `@mixin` is larger, but the GZip compression works wonders on the files using `@mixin`. GZip favors repetition, so this output will yield a better compression ratio. Read more about this topic at [CSS Wizardry](https://csswizardry.com/2016/02/mixins-better-for-performance/).
 
 ```CSS
 .title {
