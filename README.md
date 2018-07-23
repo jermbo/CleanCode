@@ -5,25 +5,25 @@ Code is for humans. There are a few simple things we can do to write more robust
 ## HTML / CSS
 
 - [x] 1.  Proper Formatting
-- [x] 2.  Meaning / Purposeful Markup
-- [x] 3.  Meaning / Purposeful Comments
+- [x] 2.  Meaningful / Purposeful Markup
+- [x] 3.  Meaningful / Purposeful Comments
 - [x] 4.  Consistent Naming Convention
 - [x] 5.  Reduce Specificity
 - [x] 6.  Avoid Inline Styles
 - [x] 7.  External Style Sheets
 - [x] 8.  External JavaScript
-- [ ] 9.  Code Smells in CSS / Sass
+- [x] 9.  Code Smells in CSS / Sass
 
 ### Proper Formatting
 
-We work in a world of partials, this causes the output files to be rendered in unusual ways. However, that does not matter. What does matter is the formatting of the source files. This means, no trailing white space, proper indentation for parent / child elements, and meaningful white space around elements. Each file should be formatted properly for several reasons;
+We work in a world of partials, this causes the output files to be rendered in unusual ways. However, that does not matter. What does matter is the formatting of the source files. This means, no trailing whitespace, proper indentation for parent / child elements, and meaningful white space around elements. Each file should be formatted properly for several reasons;
 
 1.  Readability
     - It is way easier to reason about and spot errors.
 2.  Committing Code
-    - When committing code, there only things that should be included are the actual lines of code, not white space insertions or deletions.
+    - When committing code, the only things that should be included are the actual lines of changed code, not white space insertions or deletions.
 3.  Code Reviews
-    - Code reviews are hard enough. Inconsistent formatting, such as trailing white space or misaligned parent / child elements, it can be difficult to see the new code that needs attention versus the bloat code that can be ignored.
+    - Code reviews are hard enough. Inconsistent formatting, such as trailing whitespace or misaligned parent / child elements, can make it more difficult to see the new code that needs attention versus the bloat that can be ignored.
 4.  Maintainability
     - Code changes over time. Why not leave a proper foundation for our future selves or future developers?
 
@@ -70,11 +70,11 @@ The above code is hard to read and reason about. There are a few errors in there
 </div>
 ```
 
-### Meaning / Purposeful Markup
+### Meaningful / Purposeful Markup
 
-Markup should have purpose. We should not be afraid of an extra `div` or `span` where necessary. There is a trend to nest extra `div`'s for no obvious reason. This is especially noticeable with front end frame works. While I understand why libraries like Bootstrap need those `div`'s, my concern is with their necessity overall. Can we accomplish a similar outcome with less complexity?
+Markup should have purpose. We should not be afraid of an extra `div` or `span` where necessary. But I would question if the extra markup is absolutely necessary.
 
-Use the correct tag for the correct elements. Meaning, if you have a block of text, use a paragraph tag. If you need to click something, use an anchor or button. This not only makes your code easier to reason about, it also reduces need for extra functionality, and lends itself to better accessibility.
+It’s important to use the correct tag at the correct times. Meaning, if you have a block of text, use a paragraph tag. If you need to click something, use an anchor tag. Not only does this make your code easier to reason about, it reduces the need for extra JavaScript functionality, and lends itself to better accessibility.
 
 #### Bad
 
@@ -100,9 +100,9 @@ Use the correct tag for the correct elements. Meaning, if you have a block of te
 
 ### Meaning / Purposeful Comments
 
-Code should be as self documenting as possible. However, there are reasons one would want to leave a comment. One could be to leave yourself a reminder or note to the next developer. _**These should not make it to production so use VERY sparingly.**_
+Code should be as self documenting as possible. However, there are reasons one would want to leave a comment. One could be to leave yourself a reminder or leaving a note to the next developer. _**These should not make it to production and so should be used sparingly.**_
 
-A good habit I picked up early in my career was to open and then immediately close it, as well as note what has been closed. HTML has the tendency to get nested pretty deeply, this can cause it to be difficult to be certain what is open and close properly and where.
+A good habit I picked up early in my career was to open and then immediately close it, as well as note what has been closed. HTML has a tendency to get nested pretty deep, this can cause it to be difficult to be certain what is open and closed properly and where.
 
 ### Bad
 
@@ -180,7 +180,9 @@ A good habit I picked up early in my career was to open and then immediately clo
 
 ### Consistent Naming Convention
 
-Every project you work on is a little different. If you are new to the project, take the time to see what the style is and keep things similar. If you are starting a new project, decide what the naming style is going to be and be **consistent**.
+Every project you work on will be slightly different. If you are new to an existing project, take the time to see what the style is and keep your changes similar.
+
+If you are starting a new project, decide what the naming convention is going to be, document it, and be _consistent_.
 
 #### Bad
 
@@ -188,9 +190,9 @@ Every project you work on is a little different. If you are new to the project, 
 <div class="container">
     <header class="main-header">
         <nav id="mainNav">
-            <a href="#" class="mainNav__item">Home</a>
-            <a href="#" class="mainNav__item">About</a>
-            <a href="#" class="mainNav__item">Gallery</a>
+            <a href="#" class="main-nav__item">Home</a>
+            <a href="#" class="main-nav__item">About</a>
+            <a href="#" class="main-nav__item">Gallery</a>
         </nav>
     </header>
 </div>
@@ -212,12 +214,12 @@ Every project you work on is a little different. If you are new to the project, 
 
 ### Reduce Specificity
 
-First, lets define Specificity in CSS.
+First, let's define Specificity in CSS.
 
 > **Specificity** is the means by which browsers decide which CSS property values are the most relevant to an element and, therefore, will be applied. Specificity is based on the matching rules which are composed of different sorts of [CSS Selectors](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference#Selectors)
 > -- Source [Specificity MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity)
 
-There is a cool tool you can use to determine how _specific_ selector rule is. [Specificity Calculator](https://specificity.keegan.st/)
+There is a cool tool you can use to determine how _specific_ a selector rule is. [Specificity Calculator](https://specificity.keegan.st/)
 
 Specificity is broken down into 4 categories:
 
@@ -309,17 +311,17 @@ By utilizing classes with unique meaningful names you gain the ability to easily
 
 As we learned about specificity in the previous section, it should go without saying that inline styles should be avoided. At least the hand created inline styles. If you are manipulating things with JavaScript, such as animations, the inline styles that creates is acceptable.
 
-There are some examples where one might be better suited for adding and removing classes in stead of adding an inline style. For example; hiding and showing something. You should opt for manipulating classes. This gives your more control of the adverse side affects caused by specificity.
+There are some examples where one might be better suited for adding and removing classes in stead of adding an inline style. For example; hiding and showing something. You should opt for manipulating classes. This gives your more control of the adverse side effects caused by specificity.
 
 ### External JavaScript
 
 It is best practice to keep all JavaScript functionality in an external file. Preferably with a good naming convention and structure, and included only on the pages it's needed.
 
-If you absolutely need to write inline JavaScript, it should be done for a clear and arguable reason. Other wise, put it in an external file.
+If you absolutely need to write inline JavaScript, it should be done for a clear and arguable reason. Otherwise, put it in an external file.
 
 ### Code Smells in CSS / Sass
 
-Code smells in CSS and Sass take on many different forms. The rules presented below are best practice guide lines you should follow as closely as possible. The rare exception you need to break a rule, or rules, be prepared to articulate that decision and possibly leave a comment or two explaining why.
+Code smells in CSS and Sass take on many different forms. The rules presented below are best practice guidelines you should follow as closely as possible. There are exception you need to break a rule, or rules, be prepared to articulate that decision and possibly leave a comment or two explaining why.
 
 #### Undoing Styles
 
@@ -373,7 +375,7 @@ div.post {}
 
 ##### Good
 
-With these examples, you still get the same affect, but with a lot less specificity
+With these examples, you still get the same effect, but with a lot less specificity
 
 ```CSS
 .main-nav {}
@@ -387,20 +389,162 @@ With these examples, you still get the same affect, but with a lot less specific
 
 A general rule of thumb is, no more than three nested elements. This also plays into the Specificity section, but deserves to be called out for additional reasons. Specifically with pre-processors we have to conscious of the output. Things can get out of hand quickly. Let's look at a couple of examples.
 
+##### Bad
+
+```Scss
+.blog-page {
+  .post {
+    ...
+    &__title {
+      ...
+    }
+
+    &__links {
+      a {
+        ...
+        span {
+          ...
+        }
+        &:hover {
+          ...
+          span {
+          }
+        }
+      }
+    }
+
+    &__hero {
+      ...
+      img {
+        ...
+      }
+    }
+  }
+}
+```
+
+The output looks like;
+
+```CSS
+.blog-page .post {
+  ...
+}
+.blog-page .post__title {
+  ...
+}
+.blog-page .post__links {
+  ...
+}
+.blog-page .post__links a {
+  ...
+}
+.blog-page .post__links a span {
+  ...
+}
+.blog-page .post__links a:hover {
+  ...
+}
+.blog-page .post__links a:hover span {
+  ...
+}
+.blog-page .post__hero {
+  ...
+}
+.blog-page .post__hero img {
+  ...
+}
+```
+
+##### Good
+
+```Scss
+.post {
+  ..
+}
+
+.post__title {
+  ...
+}
+
+.post__links {
+    ...
+}
+
+.post__links a,
+.post__link {
+  ...
+  span {
+    ...
+  }
+
+  &:hover {
+    ...
+    span {
+      ...
+    }
+  }
+}
+
+.post__hero {
+  ...
+  img {
+    ...
+  }
+}
+```
+
+```CSS
+.post {
+  ...
+}
+
+.post__title {
+  ...
+}
+
+.post__links {
+  ...
+}
+
+.post__links a,
+.post__link {
+  ...
+}
+.post__links a span,
+.post__link span {
+  ...
+}
+.post__links a:hover,
+.post__link:hover {
+  ...
+}
+.post__links a:hover span,
+.post__link:hover span {
+  ...
+}
+
+.post__hero {
+  ...
+}
+.post__hero img {
+  ...
+}
+```
+
 #### IDs
 
 Just don't style with ID's. The reasons are straight forward.
 
-- IDs are meant to be unique per page, and that defeats the reusability idea.
-- IDs can often have their traits abstracted into smaller, reusable classes.
+- IDs are meant to be unique per page, and that defeats the whole reusability idea.
+- IDs can often have most of, if not all of, their traits abstracted into smaller, reusable classes.
 - An ID is infinitely more specific than a class.
 - There was a bug that allowed you to chain 256 classes to overwrite an ID. This has now been corrected.
 
 #### @extend vs @mixin
 
-The main issue with `@extends` is the slippery slope it creates. Sass's `@extend` is a greedy tool, it will extend every instance of a class that it finds and will generate crazy long selector chains. Check out this [example](https://twitter.com/gaelmetais/status/564109775995437057).
+The main issue with `@extends` is the slippery slope it creates. Sass's `@extend` is a greedy tool, it will extend every instance of a class that it finds and will generate crazy long selector chains. Check out this [example](https://twitter.com/gaelmetais/status/564109775995437057) that demonstrates an extreme example, and is surprisingly easy to create.
 
-Another issue presented with this is the grouping of unrelated class names. This is a topic in it of itself. Generally speaking we should try to group like things and keep unrelated things separate. We need to be careful of causing undesired affects but intending to change one thing but changing a lot of things.
+Another issue presented with this is the grouping of unrelated class names. This is a topic in it of itself. Generally speaking we should try to group like things and keep unrelated things separate. We need to be careful of causing undesired effects, intending to change one thing but changing a lot of other things.
 
 ##### Bad
 
@@ -451,9 +595,9 @@ Let's imagine the `...` represents a bunch of code or the breaking up into small
 }
 ```
 
-The major problem is the grouping on classes that dont have anything to do with each other. Change the place holder class and you affect all of the other places that extend it. Which leads to changes that have a wide affect on your site and is very difficult test and QA for.
+The major problem is the grouping on classes that dont have anything to do with each other. Change the placeholder class and you effect all of the other places that extend it. Which leads to changes that have a wide effect on your site and is very difficult test and QA for.
 
-The other way to solve this problem and not cause unforseen ripple affect is to overwrite the attributes being added. That should be properly considered and used if absolutely necessary.
+The other way to solve this problem and not cause unforeseen ripple effect is to overwrite the attributes being added. That should be properly considered and used if absolutely necessary.
 
 ##### Good
 
@@ -483,7 +627,7 @@ Let's rework this a little bit and utilize the `@mixin` to our advantage.
 }
 ```
 
-The output code does have elements that repeat, but that is not an issue. Keeping things "DRY" is an argument for the source files, not an output generated file. GZip favors repetition, so this output will yield a better compression ration. This is a little confusing as the generated output using `@mixin` is larger, but the GZip compression works wonders on the files using `@mixin`. Read more about this topic at [CSS Wizardry](https://csswizardry.com/2016/02/mixins-better-for-performance/).
+The output code does have elements that repeat, but that is not an issue. Keeping things "DRY" is an argument for the source files, not an output generated file. This is a little confusing as the generated output using `@mixin` is larger, but the GZip compression works wonders on the files using `@mixin`. GZip favors repetition, so this output will yield a better compression ratio. Read more about this topic at [CSS Wizardry](https://csswizardry.com/2016/02/mixins-better-for-performance/).
 
 ```CSS
 .title {
