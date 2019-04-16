@@ -13,18 +13,19 @@ Code is for humans. There are a few simple things we can do to write more robust
 - [x] 7.  External Style Sheets
 - [x] 8.  External JavaScript
 - [x] 9.  Code Smells in CSS / Sass
+- [ ] 10. Meaningful Variables
 
 ### Proper Formatting
 
 We work in a world of partials, this causes the output files to be rendered in unusual ways. However, that does not matter. What does matter is the formatting of the source files. This means, no trailing whitespace, proper indentation for parent / child elements, and meaningful white space around elements. Each file should be formatted properly for several reasons;
 
-1.  Readability
+1. Readability
     - It is way easier to reason about and spot errors.
-2.  Committing Code
+2. Committing Code
     - When committing code, the only things that should be included are the actual lines of changed code, not white space insertions or deletions.
-3.  Code Reviews
+3. Code Reviews
     - Code reviews are hard enough. Inconsistent formatting, such as trailing whitespace or misaligned parent / child elements, can make it more difficult to see the new code that needs attention versus the bloat that can be ignored.
-4.  Maintainability
+4. Maintainability
     - Code changes over time. Why not leave a proper foundation for our future selves or future developers?
 
 #### Bad
@@ -653,10 +654,10 @@ The output code does have elements that repeat, but that is not an issue. Keepin
 
 ## JavaScript
 
-1.  Proper Formatting
-2.  Meaningful Variables
-3.  Meaningful Function Names
-4.  Minimize Global Scope
+1. Proper Formatting
+2. Meaningful Variables
+3. Meaningful Function Names
+4. Minimize Global Scope
 
 ### Proper Formatting
 
